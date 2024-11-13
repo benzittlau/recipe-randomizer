@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { recipes } from "@/data/recipes";
 import { RecipeFilters } from "@/components/RecipeFilters";
+import { FireIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
@@ -66,9 +67,27 @@ export default function Home() {
               )}
 
               <div className="flex gap-4 items-center">
-                <span className="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                  Effort: {recipe.effort}/5
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <FireIcon className="w-4 h-4 text-gray-600" />
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`h-4 w-4 rounded-full ${
+                        star <= recipe.effort
+                          ? recipe.effort === 1
+                            ? "bg-green-400"
+                            : recipe.effort === 2
+                            ? "bg-green-500"
+                            : recipe.effort === 3
+                            ? "bg-yellow-500"
+                            : recipe.effort === 4
+                            ? "bg-orange-500"
+                            : "bg-red-500"
+                          : "bg-gray-200"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           ))}
