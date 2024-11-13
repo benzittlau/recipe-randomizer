@@ -29,6 +29,16 @@ export default function Home() {
   const selectRandomRecipe = () => {
     const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
     setSelectedRecipe(filteredRecipes[randomIndex].id);
+    
+    setTimeout(() => {
+      const selectedRecipe = document.querySelector('[data-selected="true"]');
+      if (selectedRecipe) {
+        selectedRecipe.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
+      }
+    }, 100);
   };
 
   const handleTagChange = (tag: string) => {
@@ -54,6 +64,7 @@ export default function Home() {
           {filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
+              data-selected={selectedRecipe === recipe.id}
               className={`p-4 rounded-lg border ${
                 selectedRecipe === recipe.id
                   ? "bg-blue-100 border-blue-500"

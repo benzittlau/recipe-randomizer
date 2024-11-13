@@ -19,6 +19,20 @@ export function RecipeFilters({
   onClearFilters,
   showClearFilters,
 }: FilterProps) {
+  // Add this function to handle scrolling
+  const ensureVisibleRecipe = () => {
+    // Give the DOM time to update
+    setTimeout(() => {
+      const selectedRecipe = document.querySelector('[data-selected="true"]');
+      if (selectedRecipe) {
+        selectedRecipe.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
+      }
+    }, 100);
+  };
+
   return (
     <div className="bg-white border-b p-4 sticky top-0 z-10 shadow-sm">
       <div className="flex justify-between items-center mb-4">
@@ -26,7 +40,10 @@ export function RecipeFilters({
         <div className="h-8">
           {showClearFilters && (
             <button
-              onClick={onClearFilters}
+              onClick={() => {
+                onClearFilters();
+                ensureVisibleRecipe();
+              }}
               className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
             >
               Clear Filters
@@ -78,6 +95,7 @@ export function RecipeFilters({
                     effortRange[1]
                   );
                   onEffortRangeChange([newMin, effortRange[1]]);
+                  ensureVisibleRecipe();
                 }}
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto 
@@ -105,6 +123,7 @@ export function RecipeFilters({
                     effortRange[0]
                   );
                   onEffortRangeChange([effortRange[0], newMax]);
+                  ensureVisibleRecipe();
                 }}
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto 
@@ -138,7 +157,10 @@ export function RecipeFilters({
             {allTags.map((tag) => (
               <button
                 key={tag}
-                onClick={() => onTagChange(tag)}
+                onClick={() => {
+                  onTagChange(tag);
+                  ensureVisibleRecipe();
+                }}
                 className={`px-3 py-1 rounded-full text-sm ${
                   selectedTags.includes(tag)
                     ? "bg-blue-500 text-white"
