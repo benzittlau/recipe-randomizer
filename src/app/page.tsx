@@ -29,13 +29,21 @@ export default function Home() {
   const selectRandomRecipe = () => {
     const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
     setSelectedRecipe(filteredRecipes[randomIndex].id);
-    
+
     setTimeout(() => {
       const selectedRecipe = document.querySelector('[data-selected="true"]');
-      if (selectedRecipe) {
-        selectedRecipe.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center'
+      const filtersElement = document.querySelector(".filters-container");
+
+      if (selectedRecipe && filtersElement) {
+        const filtersHeight = filtersElement.getBoundingClientRect().height;
+
+        window.scrollTo({
+          top:
+            selectedRecipe.getBoundingClientRect().top +
+            window.scrollY -
+            filtersHeight -
+            16,
+          behavior: "smooth",
         });
       }
     }, 100);
@@ -50,13 +58,18 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col bg-gray-100">
       <RecipeFilters
+        className="filters-container"
         allTags={Array.from(new Set(recipes.flatMap((r) => r.tags))).sort()}
         selectedTags={selectedTags}
         effortRange={effortRange}
         onTagChange={handleTagChange}
         onEffortRangeChange={setEffortRange}
         onClearFilters={clearFilters}
-        showClearFilters={selectedTags.length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5}
+        showClearFilters={
+          selectedTags.length > 0 ||
+          effortRange[0] !== 1 ||
+          effortRange[1] !== 5
+        }
       />
 
       <div className="flex-1 p-4">
@@ -101,7 +114,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-2 mt-2">
                 {recipe.tags.map((tag) => (
                   <span

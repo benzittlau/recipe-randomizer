@@ -1,6 +1,15 @@
 "use client";
+import { useState } from 'react';
+import { 
+  ChevronDownIcon, 
+  ChevronUpIcon, 
+  FireIcon,
+  BeakerIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
 
 interface FilterProps {
+  className?: string;
   allTags: string[];
   selectedTags: string[];
   effortRange: [number, number];
@@ -11,6 +20,7 @@ interface FilterProps {
 }
 
 export function RecipeFilters({
+  className,
   allTags,
   selectedTags,
   effortRange,
@@ -19,6 +29,8 @@ export function RecipeFilters({
   onClearFilters,
   showClearFilters,
 }: FilterProps) {
+  const [isTagsExpanded, setIsTagsExpanded] = useState(false);
+
   // Add this function to handle scrolling
   const ensureVisibleRecipe = () => {
     // Give the DOM time to update
@@ -34,7 +46,7 @@ export function RecipeFilters({
   };
 
   return (
-    <div className="bg-white border-b p-4 sticky top-0 z-10 shadow-sm">
+    <div className={`bg-white border-b p-4 sticky top-0 z-10 shadow-sm ${className || ''}`}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold">Filters</h2>
         <div className="h-8">
@@ -44,8 +56,9 @@ export function RecipeFilters({
                 onClearFilters();
                 ensureVisibleRecipe();
               }}
-              className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
+              className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors flex items-center gap-1.5"
             >
+              <XMarkIcon className="w-4 h-4" />
               Clear Filters
             </button>
           )}
@@ -56,7 +69,10 @@ export function RecipeFilters({
         {/* Effort Range Slider */}
         <div className="space-y-2 w-full">
           <div className="flex justify-between">
-            <h3 className="text-sm font-semibold">Effort Level</h3>
+            <div className="flex items-center gap-1.5">
+              <FireIcon className="w-4 h-4 text-gray-600" />
+              <h3 className="text-sm font-semibold">Effort Level</h3>
+            </div>
             <span className="text-sm text-gray-500">
               {effortRange[0]} - {effortRange[1]}
             </span>
@@ -100,14 +116,14 @@ export function RecipeFilters({
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto 
                   [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full 
-                  [&::-webkit-slider-thumb]:bg-gray-50 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-blue-600
+                  [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white
                   [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer
-                  [&::-webkit-slider-thumb]:hover:border-blue-700 [&::-webkit-slider-thumb]:hover:bg-white
+                  [&::-webkit-slider-thumb]:hover:bg-blue-600
                   [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:pointer-events-auto 
                   [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:rounded-full 
-                  [&::-moz-range-thumb]:bg-gray-50 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-blue-600
+                  [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-white
                   [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer
-                  [&::-moz-range-thumb]:hover:border-blue-700 [&::-moz-range-thumb]:hover:bg-white"
+                  [&::-moz-range-thumb]:hover:bg-blue-600"
               />
 
               {/* Max handle */}
@@ -128,14 +144,14 @@ export function RecipeFilters({
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto 
                   [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full 
-                  [&::-webkit-slider-thumb]:bg-gray-50 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-blue-600
+                  [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white
                   [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer
-                  [&::-webkit-slider-thumb]:hover:border-blue-700 [&::-webkit-slider-thumb]:hover:bg-white
+                  [&::-webkit-slider-thumb]:hover:bg-blue-600
                   [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:pointer-events-auto 
                   [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:rounded-full 
-                  [&::-moz-range-thumb]:bg-gray-50 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-blue-600
+                  [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-white
                   [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer
-                  [&::-moz-range-thumb]:hover:border-blue-700 [&::-moz-range-thumb]:hover:bg-white"
+                  [&::-moz-range-thumb]:hover:bg-blue-600"
               />
             </div>
 
@@ -150,27 +166,62 @@ export function RecipeFilters({
           </div>
         </div>
 
-        {/* Tags */}
+        {/* Modified Tags Section */}
         <div className="space-y-2 w-full">
-          <h3 className="text-sm font-semibold">Ingredients</h3>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => {
-                  onTagChange(tag);
-                  ensureVisibleRecipe();
-                }}
-                className={`px-3 py-1 rounded-full text-sm ${
-                  selectedTags.includes(tag)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+          <button 
+            onClick={() => setIsTagsExpanded(!isTagsExpanded)}
+            className="w-full flex items-center justify-between text-sm font-semibold"
+          >
+            <div className="flex items-center gap-1.5">
+              <BeakerIcon className="w-4 h-4 text-gray-600" />
+              <span>Ingredients {selectedTags.length > 0 && `(${selectedTags.length})`}</span>
+            </div>
+            {isTagsExpanded ? (
+              <ChevronUpIcon className="h-5 w-5" />
+            ) : (
+              <ChevronDownIcon className="h-5 w-5" />
+            )}
+          </button>
+
+          {/* Show selected tags when collapsed */}
+          {!isTagsExpanded && selectedTags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedTags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    onTagChange(tag);
+                    ensureVisibleRecipe();
+                  }}
+                  className="px-3 py-1 rounded-full text-sm bg-blue-500 text-white"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Show all tags when expanded */}
+          {isTagsExpanded && (
+            <div className="flex flex-wrap gap-2">
+              {allTags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    onTagChange(tag);
+                    ensureVisibleRecipe();
+                  }}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    selectedTags.includes(tag)
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
