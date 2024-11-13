@@ -1,12 +1,6 @@
 "use client";
-import { useState } from 'react';
-import { 
-  ChevronDownIcon, 
-  ChevronUpIcon, 
-  FireIcon,
-  BeakerIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 
 interface FilterProps {
   className?: string;
@@ -37,16 +31,20 @@ export function RecipeFilters({
     setTimeout(() => {
       const selectedRecipe = document.querySelector('[data-selected="true"]');
       if (selectedRecipe) {
-        selectedRecipe.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center'
+        selectedRecipe.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
         });
       }
     }, 100);
   };
 
   return (
-    <div className={`bg-white border-b p-4 sticky top-0 z-10 shadow-sm ${className || ''}`}>
+    <div
+      className={`bg-white border-b p-4 sticky top-0 z-10 shadow-sm ${
+        className || ""
+      }`}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold">Filters</h2>
         <div className="h-8">
@@ -56,9 +54,8 @@ export function RecipeFilters({
                 onClearFilters();
                 ensureVisibleRecipe();
               }}
-              className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors flex items-center gap-1.5"
+              className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
             >
-              <XMarkIcon className="w-4 h-4" />
               Clear Filters
             </button>
           )}
@@ -69,10 +66,7 @@ export function RecipeFilters({
         {/* Effort Range Slider */}
         <div className="space-y-2 w-full">
           <div className="flex justify-between">
-            <div className="flex items-center gap-1.5">
-              <FireIcon className="w-4 h-4 text-gray-600" />
-              <h3 className="text-sm font-semibold">Effort Level</h3>
-            </div>
+            <h3 className="text-sm font-semibold">Effort Level</h3>
             <span className="text-sm text-gray-500">
               {effortRange[0]} - {effortRange[1]}
             </span>
@@ -168,14 +162,14 @@ export function RecipeFilters({
 
         {/* Modified Tags Section */}
         <div className="space-y-2 w-full">
-          <button 
+          <button
             onClick={() => setIsTagsExpanded(!isTagsExpanded)}
             className="w-full flex items-center justify-between text-sm font-semibold"
           >
-            <div className="flex items-center gap-1.5">
-              <BeakerIcon className="w-4 h-4 text-gray-600" />
-              <span>Ingredients {selectedTags.length > 0 && `(${selectedTags.length})`}</span>
-            </div>
+            <span>
+              Ingredients{" "}
+              {selectedTags.length > 0 && `(${selectedTags.length})`}
+            </span>
             {isTagsExpanded ? (
               <ChevronUpIcon className="h-5 w-5" />
             ) : (
