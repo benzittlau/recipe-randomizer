@@ -3,156 +3,194 @@ import { Recipe } from "@/types/recipe";
 export const recipes: Recipe[] = [
   {
     id: "1",
-    name: "Spaghetti Carbonara",
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta",
-    effort: 3,
-    tags: ['pasta', 'pork', 'eggs', 'cheese', 'italian']
+    name: "Taco Bowls",
+    effort: 2,
+    tags: ['taco']
   },
   {
     id: "2",
-    name: "Chicken Stir Fry",
-    description: "Quick and healthy Asian-inspired dish",
-    effort: 2,
-    tags: ['chicken', 'vegetables', 'asian', 'rice']
+    name: "Tacos (black bean patties)",
+    effort: 1,
+    tags: ['taco', 'beans']
   },
   {
     id: "3",
-    name: "Beef Lasagna",
-    description: "Layered pasta with rich meat sauce and creamy béchamel",
-    effort: 4,
-    tags: ['beef', 'pasta', 'italian']
+    name: "Tacos (black beans)",
+    effort: 2,
+    tags: ['taco', 'beans']
   },
   {
     id: "4",
-    name: "Grilled Salmon",
-    description: "Fresh salmon with lemon and herbs",
+    name: "Miso Lentil Buddha Bowls",
     effort: 2,
-    tags: ['salmon', 'fish', 'herbs']
+    tags: ['rice', 'lentils']
   },
   {
     id: "5",
-    name: "Vegetable Curry",
-    description: "Mixed vegetables in aromatic Indian spices",
-    effort: 3,
-    tags: ['vegetables', 'indian', 'spices']
+    name: "Tofu Teriyaki Rice Bowl",
+    effort: 2,
+    tags: ['rice', 'tofu']
   },
   {
     id: "6",
-    name: "Mushroom Risotto",
-    description: "Creamy Italian rice with mushrooms and parmesan",
-    effort: 3,
-    tags: ['rice', 'mushrooms', 'italian']
+    name: "Ramen Soups",
+    effort: 1,
+    tags: ['soup']
   },
   {
     id: "7",
-    name: "Beef Tacos",
-    description: "Ground beef tacos with fresh toppings",
-    effort: 2,
-    tags: ['beef', 'tacos', 'mexican']
+    name: "Falafel wraps with Tzaziki",
+    effort: 3,
+    tags: ['falafel']
   },
   {
     id: "8",
-    name: "Greek Salad",
-    description: "Fresh vegetables with feta cheese and olives",
-    effort: 2,
-    tags: ['vegetables', 'greek', 'olives']
+    name: "Falafel with rice/Tzaziki",
+    effort: 3,
+    tags: ['rice', 'falafel']
   },
   {
     id: "9",
-    name: "Chicken Parmesan",
-    description: "Breaded chicken with marinara and melted cheese",
+    name: "Pasta w/ Avacado Pesto Sauce",
     effort: 3,
-    tags: ['chicken', 'parmesan', 'italian']
+    tags: ['pasta', 'avocado']
   },
   {
     id: "10",
-    name: "Shrimp Scampi",
-    description: "Garlic butter shrimp with white wine sauce",
-    effort: 3,
-    tags: ['shrimp', 'garlic', 'white wine']
+    name: "One pot pasta primavera",
+    effort: 2,
+    tags: ['pasta']
   },
   {
     id: "11",
-    name: "Beef Stir Fry",
-    description: "Tender beef strips with mixed vegetables",
-    effort: 2,
-    tags: ['beef', 'stir fry', 'asian']
+    name: "Pasta w/ Red Sauce",
+    effort: 1,
+    tags: ['pasta']
   },
   {
     id: "12",
-    name: "Vegetable Pizza",
-    description: "Homemade pizza with assorted vegetables",
-    effort: 3,
-    tags: ['pizza', 'vegetables', 'italian']
+    name: "Roasted potatoes and meatballs",
+    effort: 2,
+    tags: ['meatballs', 'potatoes']
   },
   {
     id: "13",
-    name: "Chicken Fajitas",
-    description: "Sizzling chicken with peppers and onions",
-    effort: 2,
-    tags: ['chicken', 'fajitas', 'mexican']
+    name: "Red curry w/ tofu",
+    effort: 3,
+    tags: ['curry', 'tofu']
   },
   {
     id: "14",
-    name: "Tuna Pasta Salad",
-    description: "Cold pasta salad with tuna and vegetables",
-    effort: 2,
-    tags: ['tuna', 'pasta', 'salad']
+    name: "Tom yum curry (with chickpeas)",
+    effort: 4,
+    tags: ['chickpeas', 'instapot', 'curry']
   },
   {
     id: "15",
-    name: "Beef Burgers",
-    description: "Classic homemade burgers with toppings",
-    effort: 3,
-    tags: ['beef', 'burgers', 'american']
+    name: "Jambalaya with beyond sausage",
+    effort: 2,
+    tags: ['beyond sausage', 'rice']
   },
   {
     id: "16",
-    name: "Pad Thai",
-    description: "Thai stir-fried rice noodles with peanuts",
-    effort: 3,
-    tags: ['pad thai', 'thai', 'asian']
+    name: "Eggs and Hashbrowns",
+    effort: 1,
+    tags: ['eggs', 'breakfast']
   },
   {
     id: "17",
-    name: "Chicken Caesar Salad",
-    description: "Romaine lettuce with grilled chicken and caesar dressing",
+    name: "Fried Rice",
     effort: 2,
-    tags: ['chicken', 'caesar', 'salad']
+    tags: ['rice', 'eggs']
   },
   {
     id: "18",
-    name: "Beef Stroganoff",
-    description: "Creamy beef and mushroom sauce with egg noodles",
+    name: "Quesadilla",
     effort: 3,
-    tags: ['beef', 'stroganoff', 'russian']
+    tags: ['mexican']
   },
   {
     id: "19",
-    name: "Vegetable Stir Fry",
-    description: "Mixed vegetables in Asian sauce",
-    effort: 2,
-    tags: ['vegetables', 'stir fry', 'asian']
+    name: "Stirfry",
+    effort: 3,
+    tags: ['tofu', 'rice']
   },
   {
     id: "20",
-    name: "Baked Ziti",
-    description: "Pasta baked with tomato sauce and cheese",
-    effort: 3,
-    tags: ['baked ziti', 'pasta', 'italian']
+    name: "Burgers + Risotto (Salmon/Veggie)",
+    effort: 1,
+    tags: ['risotto', 'salmon']
   },
   {
     id: "21",
-    name: "Fish Tacos",
-    description: "Grilled fish with slaw and lime crema",
-    effort: 3,
-    tags: ['fish', 'tacos', 'mexican']
+    name: "Chili",
+    effort: 2,
+    tags: []
   },
   {
     id: "22",
-    name: "Quinoa Buddha Bowl",
-    description: "Healthy grain bowl with roasted vegetables",
+    name: "Lentil Stew",
+    effort: 3,
+    tags: ['lentils', 'instapot']
+  },
+  {
+    id: "23",
+    name: "Dumplings and Edamame",
+    effort: 1,
+    tags: ['rice', 'edamame']
+  },
+  {
+    id: "24",
+    name: "Egg noodles and meatballs (w mushroom gravy)",
+    effort: 4,
+    tags: ['meatballs', 'noodles']
+  },
+  {
+    id: "25",
+    name: "Roasted sweet potatoes w salmon",
+    effort: 3,
+    tags: ['sweet potatoes', 'salmon']
+  },
+  {
+    id: "26",
+    name: "Mexican rice",
     effort: 2,
-    tags: ['quinoa', 'buddha bowl', 'healthy']
+    tags: ['rice', 'mexican']
+  },
+  {
+    id: "27",
+    name: "Ceaser Chicken Wrap",
+    effort: 2,
+    tags: ['chicken', 'tortilla']
+  },
+  {
+    id: "28",
+    name: "Buffalo Chicken Wrap",
+    effort: 2,
+    tags: ['chicken', 'tortilla']
+  },
+  {
+    id: "29",
+    name: "Breakfast egg pockets",
+    effort: 2,
+    tags: ['breakfast', 'tortilla', 'eggs']
+  },
+  {
+    id: "30",
+    name: "Momofuku noodle bowls/stir fry",
+    effort: 2,
+    tags: ['noodles']
+  },
+  {
+    id: "31",
+    name: "Rice paper salad rolls",
+    effort: 2,
+    tags: []
+  },
+  {
+    id: "32",
+    name: "Falafel pita wraps",
+    effort: 2,
+    tags: ['falafel']
   }
 ];
