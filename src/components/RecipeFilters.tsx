@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 interface FilterProps {
   allTags: string[];
@@ -7,6 +7,7 @@ interface FilterProps {
   onTagChange: (tag: string) => void;
   onEffortRangeChange: (range: [number, number]) => void;
   onClearFilters: () => void;
+  showClearFilters: boolean;
 }
 
 export function RecipeFilters({
@@ -15,25 +16,25 @@ export function RecipeFilters({
   effortRange,
   onTagChange,
   onEffortRangeChange,
-  onClearFilters
+  onClearFilters,
+  showClearFilters,
 }: FilterProps) {
-  const hasActiveFilters = selectedTags.length > 0 || 
-    (effortRange[0] > 1 || effortRange[1] < 5);
-
   return (
     <div className="bg-white border-b p-4 sticky top-0 z-10 shadow-sm">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold">Filters</h2>
-        {hasActiveFilters && (
-          <button
-            onClick={onClearFilters}
-            className="text-sm text-blue-500 hover:text-blue-700"
-          >
-            Clear all filters
-          </button>
-        )}
+        <div className="h-8">
+          {showClearFilters && (
+            <button
+              onClick={onClearFilters}
+              className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
       </div>
-      
+
       <div className="flex flex-wrap gap-6">
         {/* Effort Range Slider */}
         <div className="space-y-2 w-full">
@@ -47,26 +48,23 @@ export function RecipeFilters({
             <div className="relative h-3">
               {/* Background track */}
               <div className="absolute h-3 w-full bg-gray-200 rounded-full"></div>
-              
+
               {/* Selected range */}
-              <div 
+              <div
                 className="absolute h-3 bg-blue-500 rounded-full"
                 style={{
                   left: `${((effortRange[0] - 1) / 4) * 100}%`,
-                  right: `${100 - ((effortRange[1] - 1) / 4) * 100}%`
+                  right: `${100 - ((effortRange[1] - 1) / 4) * 100}%`,
                 }}
               ></div>
 
               {/* Scale markers */}
               <div className="absolute w-full h-full flex justify-between items-center px-4">
                 {[1, 2, 3, 4, 5].map((num) => (
-                  <div 
-                    key={num} 
-                    className="w-0.5 h-5 bg-gray-300 -mt-1"
-                  />
+                  <div key={num} className="w-0.5 h-5 bg-gray-300 -mt-1" />
                 ))}
               </div>
-              
+
               {/* Min handle */}
               <input
                 type="range"
@@ -75,7 +73,10 @@ export function RecipeFilters({
                 step={1}
                 value={effortRange[0]}
                 onChange={(e) => {
-                  const newMin = Math.min(Number(e.target.value), effortRange[1]);
+                  const newMin = Math.min(
+                    Number(e.target.value),
+                    effortRange[1]
+                  );
                   onEffortRangeChange([newMin, effortRange[1]]);
                 }}
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
@@ -90,7 +91,7 @@ export function RecipeFilters({
                   [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer
                   [&::-moz-range-thumb]:hover:border-blue-700 [&::-moz-range-thumb]:hover:bg-white"
               />
-              
+
               {/* Max handle */}
               <input
                 type="range"
@@ -99,7 +100,10 @@ export function RecipeFilters({
                 step={1}
                 value={effortRange[1]}
                 onChange={(e) => {
-                  const newMax = Math.max(Number(e.target.value), effortRange[0]);
+                  const newMax = Math.max(
+                    Number(e.target.value),
+                    effortRange[0]
+                  );
                   onEffortRangeChange([effortRange[0], newMax]);
                 }}
                 className="absolute w-full -top-2.5 h-8 appearance-none bg-transparent pointer-events-none 
@@ -137,8 +141,8 @@ export function RecipeFilters({
                 onClick={() => onTagChange(tag)}
                 className={`px-3 py-1 rounded-full text-sm ${
                   selectedTags.includes(tag)
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 {tag}
@@ -149,4 +153,4 @@ export function RecipeFilters({
       </div>
     </div>
   );
-} 
+}

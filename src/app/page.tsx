@@ -46,6 +46,7 @@ export default function Home() {
         onTagChange={handleTagChange}
         onEffortRangeChange={setEffortRange}
         onClearFilters={clearFilters}
+        showClearFilters={selectedTags.length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5}
       />
 
       <div className="flex-1 p-4">
@@ -88,6 +89,17 @@ export default function Home() {
                     />
                   ))}
                 </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 mt-2">
+                {recipe.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
