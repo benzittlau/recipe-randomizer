@@ -52,7 +52,7 @@ export function RecipeFilters({
         className || ""
       }`}
     >
-      <div className="flex items-center justify-between p-2 border-b">
+      <div className="flex items-center justify-between p-2 border-b min-h-[52px]">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-2 hover:bg-gray-100 p-1.5 rounded-md"
@@ -66,23 +66,25 @@ export function RecipeFilters({
           )}
         </button>
 
-        {showClearFilters && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onClearFilters();
-              ensureVisibleRecipe();
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm 
-              text-red-600 hover:text-red-700
-              border border-red-200 hover:border-red-300
-              hover:bg-red-50
-              rounded-md transition-colors"
-          >
-            <TrashIcon className="w-4 h-4" />
-            Clear Filters
-          </button>
-        )}
+        <div className="h-9">
+          {showClearFilters && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClearFilters();
+                ensureVisibleRecipe();
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm 
+                text-red-600 hover:text-red-700
+                border border-red-200 hover:border-red-300
+                hover:bg-red-50
+                rounded-md transition-colors"
+            >
+              <TrashIcon className="w-4 h-4" />
+              Clear Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {isExpanded ? (
