@@ -84,7 +84,19 @@ export default function Home() {
   };
 
   const selectRandomRecipe = () => {
-    const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
+    if (filteredRecipes.length === 0) return;
+    
+    let randomIndex: number;
+    
+    if (filteredRecipes.length === 1) {
+      randomIndex = 0;
+    } else {
+      // Keep generating a random index until we find one that's different from the current selection
+      do {
+        randomIndex = Math.floor(Math.random() * filteredRecipes.length);
+      } while (filteredRecipes[randomIndex].id === selectedRecipe);
+    }
+    
     setSelectedRecipe(filteredRecipes[randomIndex].id);
 
     // Use requestAnimationFrame to ensure the DOM has updated
