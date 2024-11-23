@@ -133,71 +133,75 @@ export default function Home() {
           }
         />
 
-        <div className="flex-1 p-4 overflow-y-auto recipe-scroll-container">
-          <div className="space-y-3">
-            {filteredRecipes.map((recipe) => (
-              <div
-                key={recipe.id}
-                data-selected={selectedRecipe === recipe.id}
-                className={`p-4 rounded-xl border transition-all ${
-                  selectedRecipe === recipe.id
-                    ? "bg-blue-50 border-primary shadow-sm"
-                    : "bg-card border-card-border hover:border-primary/30"
-                }`}
-              >
-                <h2 className="font-semibold text-lg">{recipe.name}</h2>
-                {recipe.description && (
-                  <p className="text-gray-800 text-sm mb-3">
-                    {recipe.description}
-                  </p>
-                )}
+        <div className="relative flex-1 flex flex-col overflow-hidden">
+          <div className="absolute inset-0 overflow-y-auto recipe-scroll-container">
+            <div className="space-y-3 p-4 pb-24">
+              {filteredRecipes.map((recipe) => (
+                <div
+                  key={recipe.id}
+                  data-selected={selectedRecipe === recipe.id}
+                  className={`p-4 rounded-xl border transition-all ${
+                    selectedRecipe === recipe.id
+                      ? "bg-blue-50 border-primary shadow-sm"
+                      : "bg-card border-card-border hover:border-primary/30"
+                  }`}
+                >
+                  <h2 className="font-semibold text-lg">{recipe.name}</h2>
+                  {recipe.description && (
+                    <p className="text-gray-800 text-sm mb-3">
+                      {recipe.description}
+                    </p>
+                  )}
 
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="flex items-center gap-1.5">
-                    <FireIcon className="w-4 h-4 text-gray-800" />
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span
-                        key={star}
-                        className={`h-3 w-3 rounded-full ${
-                          star <= recipe.effort
-                            ? recipe.effort === 1
-                              ? "bg-green-400"
-                              : recipe.effort === 2
-                              ? "bg-green-500"
-                              : recipe.effort === 3
-                              ? "bg-yellow-500"
-                              : recipe.effort === 4
-                              ? "bg-orange-500"
-                              : "bg-red-500"
-                            : "bg-gray-100"
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <FireIcon className="w-4 h-4 text-gray-800" />
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          className={`h-3 w-3 rounded-full ${
+                            star <= recipe.effort
+                              ? recipe.effort === 1
+                                ? "bg-green-400"
+                                : recipe.effort === 2
+                                ? "bg-green-500"
+                                : recipe.effort === 3
+                                ? "bg-yellow-500"
+                                : recipe.effort === 4
+                                ? "bg-orange-500"
+                                : "bg-red-500"
+                              : "bg-gray-100"
+                          }`}
+                        />
+                      ))}
+                    </div>
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {recipe.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-800 border border-gray-200"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    <div className="flex flex-wrap gap-1.5">
+                      {recipe.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-800 border border-gray-200"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="p-4 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm flex-shrink-0">
-          <button
-            onClick={selectRandomRecipe}
-            className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
-          >
-            Pick Random Recipe
-          </button>
+        <div className="fixed bottom-0 left-0 right-0">
+          <div className="max-w-3xl mx-auto p-4 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm">
+            <button
+              onClick={selectRandomRecipe}
+              className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
+            >
+              Pick Random Recipe
+            </button>
+          </div>
         </div>
       </div>
     </main>
