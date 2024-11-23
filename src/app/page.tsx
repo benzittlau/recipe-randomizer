@@ -6,11 +6,15 @@ import { RecipeFilters } from "@/components/RecipeFilters";
 import { FireIcon } from "@heroicons/react/24/outline";
 import { useClientState } from "@/hooks/useClientState";
 
+type TagFilterState = "disabled" | "whitelist" | "blacklist";
+type TagFilters = Record<string, TagFilterState>;
+
 export default function Home() {
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
-  const [selectedTags, setSelectedTags, isLoadingTags] = useClientState<
-    string[]
-  >("selectedTags", []);
+  const [tagFilters, setTagFilters, isLoadingTags] = useClientState<TagFilters>(
+    "tagFilters",
+    {}
+  );
   const [effortRange, setEffortRange, isLoadingEffort] = useClientState<
     [number, number]
   >("effortRange", [1, 5]);
@@ -20,9 +24,14 @@ export default function Home() {
       .filter((recipe) => {
         const effortMatch =
           recipe.effort >= effortRange[0] && recipe.effort <= effortRange[1];
-        const tagsMatch =
-          selectedTags.length === 0 ||
-          selectedTags.every((tag) => recipe.tags.includes(tag));
+
+        const tagsMatch = Object.entries(tagFilters).every(([tag, state]) => {
+          if (state === "disabled") return true;
+          if (state === "whitelist") return recipe.tags.includes(tag);
+          if (state === "blacklist") return !recipe.tags.includes(tag);
+          return true;
+        });
+
         return effortMatch && tagsMatch;
       })
       .sort((a, b) => {
@@ -32,7 +41,7 @@ export default function Home() {
         }
         return effortDiff;
       });
-  }, [effortRange, selectedTags]);
+  }, [effortRange, tagFilters]);
 
   if (isLoadingTags || isLoadingEffort) {
     return (
@@ -46,7 +55,7 @@ export default function Home() {
   }
 
   const clearFilters = () => {
-    setSelectedTags([]);
+    setTagFilters({});
     setEffortRange([1, 5]);
   };
 
@@ -73,10 +82,26 @@ export default function Home() {
     }, 100);
   };
 
-  const handleTagChange = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
+  const handleTagChange = (tag: string, forceDisabled: boolean = false) => {
+    if (forceDisabled) {
+      setTagFilters((prev) => {
+        const next = { ...prev };
+        delete next[tag];
+        return next;
+      });
+      return;
+    }
+
+    setTagFilters((prev) => {
+      const next = { ...prev };
+      const currentState = prev[tag] || "disabled";
+      
+      if (currentState === "disabled") next[tag] = "whitelist";
+      else if (currentState === "whitelist") next[tag] = "blacklist";
+      else delete next[tag]; // Reset to disabled state
+
+      return next;
+    });
   };
 
   return (
@@ -85,13 +110,13 @@ export default function Home() {
         <RecipeFilters
           className="filters-container backdrop-blur-sm bg-card/80 border-card-border flex-shrink-0"
           allTags={Array.from(new Set(recipes.flatMap((r) => r.tags))).sort()}
-          selectedTags={selectedTags}
+          tagFilters={tagFilters}
           effortRange={effortRange}
           onTagChange={handleTagChange}
           onEffortRangeChange={setEffortRange}
           onClearFilters={clearFilters}
           showClearFilters={
-            selectedTags.length > 0 ||
+            Object.keys(tagFilters).length > 0 ||
             effortRange[0] !== 1 ||
             effortRange[1] !== 5
           }

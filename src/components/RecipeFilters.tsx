@@ -11,9 +11,9 @@ import { FireIcon } from "@heroicons/react/24/solid";
 interface FilterProps {
   className?: string;
   allTags: string[];
-  selectedTags: string[];
+  tagFilters: Record<string, "disabled" | "whitelist" | "blacklist">;
   effortRange: [number, number];
-  onTagChange: (tag: string) => void;
+  onTagChange: (tag: string, forceDisabled?: boolean) => void;
   onEffortRangeChange: (range: [number, number]) => void;
   onClearFilters: () => void;
   showClearFilters: boolean;
@@ -22,7 +22,7 @@ interface FilterProps {
 export function RecipeFilters({
   className,
   allTags,
-  selectedTags,
+  tagFilters,
   effortRange,
   onTagChange,
   onEffortRangeChange,
@@ -43,8 +43,23 @@ export function RecipeFilters({
     }, 100);
   };
 
+  const getTagClassName = (tag: string) => {
+    const state = tagFilters[tag] || "disabled";
+    
+    if (state === "disabled") {
+      return "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200";
+    }
+    if (state === "whitelist") {
+      return "bg-blue-500 text-white border-blue-600";
+    }
+    if (state === "blacklist") {
+      return "bg-white text-red-600 border-red-300 line-through hover:bg-red-50";
+    }
+    return "";
+  };
+
   const hasActiveFilters =
-    selectedTags.length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5;
+    Object.keys(tagFilters).length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5;
 
   return (
     <div
@@ -225,7 +240,7 @@ export function RecipeFilters({
             <div className="space-y-2 w-full">
               <h3 className="text-sm font-semibold">
                 Ingredients{" "}
-                {selectedTags.length > 0 && `(${selectedTags.length})`}
+                {Object.keys(tagFilters).length > 0 && `(${Object.keys(tagFilters).length})`}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {allTags.map((tag) => (
@@ -235,11 +250,7 @@ export function RecipeFilters({
                       onTagChange(tag);
                       ensureVisibleRecipe();
                     }}
-                    className={`px-3 py-1 text-sm rounded-full border ${
-                      selectedTags.includes(tag)
-                        ? "bg-blue-500 text-white border-blue-600"
-                        : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-                    }`}
+                    className={`px-3 py-1 text-sm rounded-full border ${getTagClassName(tag)}`}
                   >
                     {tag}
                   </button>
@@ -268,14 +279,18 @@ export function RecipeFilters({
             )}
 
             {/* Selected Tags */}
-            {selectedTags.map((tag) => (
+            {Object.entries(tagFilters).map(([tag, state]) => (
               <button
                 key={tag}
                 onClick={() => {
-                  onTagChange(tag);
+                  onTagChange(tag, true);
                   ensureVisibleRecipe();
                 }}
-                className="px-3 py-1 text-sm rounded-full bg-blue-500 text-white border border-blue-600 whitespace-nowrap hover:bg-blue-600 transition-colors"
+                className={`px-3 py-1 text-sm rounded-full border whitespace-nowrap hover:opacity-90 transition-colors ${
+                  state === "whitelist"
+                    ? "bg-blue-500 text-white border-blue-600"
+                    : "bg-white text-red-600 border-red-300 line-through"
+                }`}
               >
                 {tag}
               </button>
