@@ -4,16 +4,12 @@ import { useState, useMemo } from "react";
 import { recipes } from "@/data/recipes";
 import { RecipeFilters } from "@/components/RecipeFilters";
 import { FireIcon } from "@heroicons/react/24/outline";
+import { useClientState } from '@/hooks/useClientState';
 
 export default function Home() {
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [effortRange, setEffortRange] = useState<[number, number]>([1, 5]);
-
-  const clearFilters = () => {
-    setSelectedTags([]);
-    setEffortRange([1, 5]);
-  };
+  const [selectedTags, setSelectedTags, isLoadingTags] = useClientState<string[]>('selectedTags', []);
+  const [effortRange, setEffortRange, isLoadingEffort] = useClientState<[number, number]>('effortRange', [1, 5]);
 
   const filteredRecipes = useMemo(() => {
     return recipes.filter((recipe) => {
@@ -25,6 +21,22 @@ export default function Home() {
       return effortMatch && tagsMatch;
     });
   }, [effortRange, selectedTags]);
+
+  if (isLoadingTags || isLoadingEffort) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-background">
+        <div className="p-4 text-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-2 text-sm text-gray-600">Loading...</p>
+        </div>
+      </main>
+    );
+  }
+
+  const clearFilters = () => {
+    setSelectedTags([]);
+    setEffortRange([1, 5]);
+  };
 
   const selectRandomRecipe = () => {
     const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
