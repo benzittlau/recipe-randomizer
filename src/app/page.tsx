@@ -145,6 +145,11 @@ export default function Home() {
               recipe={currentRecipe}
               isFiltered={recipeNavigation?.isCurrentRecipeFiltered ?? false}
               onBack={() => setCurrentRecipeId(null)}
+              tagFilters={tagFilters}
+              onTagChange={(tag) => {
+                handleTagChange(tag);
+                // Note: we're not passing forceDisabled here since we want the cycling behavior
+              }}
             />
           ) : (
             <div className="space-y-3">

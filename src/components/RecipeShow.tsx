@@ -5,9 +5,32 @@ interface RecipeShowProps {
   recipe: Recipe;
   isFiltered: boolean;
   onBack: () => void;
+  tagFilters: Record<string, "disabled" | "whitelist" | "blacklist">;
+  onTagChange: (tag: string) => void;
 }
 
-export function RecipeShow({ recipe, isFiltered, onBack }: RecipeShowProps) {
+export function RecipeShow({ 
+  recipe, 
+  isFiltered, 
+  onBack,
+  tagFilters,
+  onTagChange 
+}: RecipeShowProps) {
+  const getTagClassName = (tag: string) => {
+    const state = tagFilters[tag] || "disabled";
+    
+    if (state === "disabled") {
+      return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
+    }
+    if (state === "whitelist") {
+      return "bg-blue-500 text-white border-blue-600";
+    }
+    if (state === "blacklist") {
+      return "bg-white text-red-600 border-red-300 line-through hover:bg-red-50";
+    }
+    return "";
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -80,12 +103,13 @@ export function RecipeShow({ recipe, isFiltered, onBack }: RecipeShowProps) {
             </h3>
             <div className="flex flex-wrap gap-2">
               {recipe.tags.map((tag) => (
-                <span
+                <button
                   key={tag}
-                  className="px-3 py-1.5 text-sm rounded-lg bg-gray-50 text-gray-700 border border-gray-200"
+                  onClick={() => onTagChange(tag)}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${getTagClassName(tag)}`}
                 >
                   {tag}
-                </span>
+                </button>
               ))}
             </div>
           </div>
