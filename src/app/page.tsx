@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { RecipeFilters } from "@/components/RecipeFilters";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon, CubeIcon } from "@heroicons/react/24/outline";
 import { useClientState } from "@/hooks/useClientState";
 import { RecipeShow } from "@/components/RecipeShow";
 import { RecipeListItem } from "@/components/RecipeListItem";
@@ -197,9 +197,10 @@ export default function Home() {
             
             <button
               onClick={selectRandomRecipe}
-              className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
+              className="flex-1 bg-primary text-white py-3 px-4 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm flex items-center justify-center gap-2"
             >
-              Pick Random Recipe
+              <CubeIcon className="w-5 h-5" />
+              I'm Feeling Lucky
             </button>
 
             {currentRecipe && (
