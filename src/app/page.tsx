@@ -3,14 +3,16 @@
 import { useState, useMemo } from "react";
 import { recipes } from "@/data/recipes";
 import { RecipeFilters } from "@/components/RecipeFilters";
-import { FireIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useClientState } from "@/hooks/useClientState";
+import { RecipeShow } from "@/components/RecipeShow";
+import { RecipeListItem } from "@/components/RecipeListItem";
 
 type TagFilterState = "disabled" | "whitelist" | "blacklist";
 type TagFilters = Record<string, TagFilterState>;
 
 export default function Home() {
-  const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
+  const [currentRecipeId, setCurrentRecipeId] = useState<string | null>(null);
   const [tagFilters, setTagFilters, isLoadingTags] = useClientState<TagFilters>(
     "tagFilters",
     {}
@@ -43,6 +45,42 @@ export default function Home() {
       });
   }, [effortRange, tagFilters]);
 
+  const recipeNavigation = useMemo(() => {
+    if (!currentRecipeId) return null;
+    
+    const currentIndex = filteredRecipes.findIndex(r => r.id === currentRecipeId);
+    return {
+      hasPrevious: filteredRecipes.length > 0,
+      hasNext: filteredRecipes.length > 0,
+      previousId: filteredRecipes.length > 0 
+        ? currentIndex <= 0 
+          ? filteredRecipes[filteredRecipes.length - 1].id
+          : filteredRecipes[currentIndex - 1].id
+        : null,
+      nextId: filteredRecipes.length > 0
+        ? currentIndex >= filteredRecipes.length - 1
+          ? filteredRecipes[0].id
+          : filteredRecipes[currentIndex + 1].id
+        : null,
+      isCurrentRecipeFiltered: currentIndex !== -1
+    };
+  }, [currentRecipeId, filteredRecipes]);
+
+  const selectRandomRecipe = () => {
+    if (filteredRecipes.length === 0) return;
+
+    let randomIndex: number;
+    if (filteredRecipes.length === 1) {
+      randomIndex = 0;
+    } else {
+      do {
+        randomIndex = Math.floor(Math.random() * filteredRecipes.length);
+      } while (filteredRecipes[randomIndex].id === currentRecipeId);
+    }
+
+    setCurrentRecipeId(filteredRecipes[randomIndex].id);
+  };
+
   if (isLoadingTags || isLoadingEffort) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-background">
@@ -57,54 +95,6 @@ export default function Home() {
   const clearFilters = () => {
     setTagFilters({});
     setEffortRange([1, 5]);
-  };
-
-  const scrollToSelectedRecipe = () => {
-    const selectedRecipe = document.querySelector('[data-selected="true"]');
-    const scrollContainer = document.querySelector(".recipe-scroll-container");
-
-    if (selectedRecipe && scrollContainer) {
-      const recipeRect = selectedRecipe.getBoundingClientRect();
-      const containerRect = scrollContainer.getBoundingClientRect();
-
-      // Calculate the ideal scroll position (recipe at the top of the viewport)
-      const idealScrollTop =
-        scrollContainer.scrollTop + (recipeRect.top - containerRect.top);
-
-      // Calculate the maximum scroll position
-      const maxScroll =
-        scrollContainer.scrollHeight - scrollContainer.clientHeight;
-
-      // Clamp the scroll position between 0 and maxScroll
-      const clampedScroll = Math.max(0, Math.min(idealScrollTop, maxScroll));
-
-      // Set scroll position without animation
-      scrollContainer.scrollTop = clampedScroll;
-    }
-  };
-
-  const selectRandomRecipe = () => {
-    if (filteredRecipes.length === 0) return;
-    
-    let randomIndex: number;
-    
-    if (filteredRecipes.length === 1) {
-      randomIndex = 0;
-    } else {
-      // Keep generating a random index until we find one that's different from the current selection
-      do {
-        randomIndex = Math.floor(Math.random() * filteredRecipes.length);
-      } while (filteredRecipes[randomIndex].id === selectedRecipe);
-    }
-    
-    setSelectedRecipe(filteredRecipes[randomIndex].id);
-
-    // Use requestAnimationFrame to ensure the DOM has updated
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToSelectedRecipe();
-      });
-    });
   };
 
   const handleTagChange = (tag: string, forceDisabled: boolean = false) => {
@@ -129,6 +119,8 @@ export default function Home() {
     });
   };
 
+  const currentRecipe = currentRecipeId ? recipes.find(r => r.id === currentRecipeId) : null;
+
   return (
     <main className="h-dvh flex flex-col bg-background">
       <div className="max-w-3xl w-full mx-auto flex flex-col h-full">
@@ -148,70 +140,54 @@ export default function Home() {
         />
 
         <div className="flex-1 p-4 overflow-y-auto recipe-scroll-container">
-          <div className="space-y-3">
-            {filteredRecipes.map((recipe) => (
-              <div
-                key={recipe.id}
-                data-selected={selectedRecipe === recipe.id}
-                className={`p-4 rounded-xl border transition-all ${
-                  selectedRecipe === recipe.id
-                    ? "bg-blue-50 border-primary shadow-sm"
-                    : "bg-card border-card-border hover:border-primary/30"
-                }`}
-              >
-                <h2 className="font-semibold text-lg">{recipe.name}</h2>
-                {recipe.description && (
-                  <p className="text-gray-800 text-sm mb-3">
-                    {recipe.description}
-                  </p>
-                )}
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="flex items-center gap-1.5">
-                    <FireIcon className="w-4 h-4 text-gray-800" />
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span
-                        key={star}
-                        className={`h-3 w-3 rounded-full ${
-                          star <= recipe.effort
-                            ? recipe.effort === 1
-                              ? "bg-green-400"
-                              : recipe.effort === 2
-                              ? "bg-green-500"
-                              : recipe.effort === 3
-                              ? "bg-yellow-500"
-                              : recipe.effort === 4
-                              ? "bg-orange-500"
-                              : "bg-red-500"
-                            : "bg-gray-100"
-                        }`}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {recipe.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-800 border border-gray-200"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {currentRecipe ? (
+            <RecipeShow
+              recipe={currentRecipe}
+              isFiltered={recipeNavigation?.isCurrentRecipeFiltered ?? false}
+              onBack={() => setCurrentRecipeId(null)}
+            />
+          ) : (
+            <div className="space-y-3">
+              {filteredRecipes.map((recipe) => (
+                <RecipeListItem
+                  key={recipe.id}
+                  recipe={recipe}
+                  onClick={() => setCurrentRecipeId(recipe.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="p-4 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm flex-shrink-0">
-          <button
-            onClick={selectRandomRecipe}
-            className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
-          >
-            Pick Random Recipe
-          </button>
+          <div className="flex gap-2">
+            {currentRecipe && (
+              <button
+                onClick={() => recipeNavigation?.previousId && setCurrentRecipeId(recipeNavigation.previousId)}
+                disabled={!recipeNavigation?.hasPrevious}
+                className="px-4 py-3 rounded-xl font-medium bg-gray-100 text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+            )}
+            
+            <button
+              onClick={selectRandomRecipe}
+              className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
+            >
+              Pick Random Recipe
+            </button>
+
+            {currentRecipe && (
+              <button
+                onClick={() => recipeNavigation?.nextId && setCurrentRecipeId(recipeNavigation.nextId)}
+                disabled={!recipeNavigation?.hasNext}
+                className="px-4 py-3 rounded-xl font-medium bg-gray-100 text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
+              >
+                <ChevronRightIcon className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </main>
