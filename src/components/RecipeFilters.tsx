@@ -32,15 +32,23 @@ export function RecipeFilters({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const ensureVisibleRecipe = () => {
-    setTimeout(() => {
-      const selectedRecipe = document.querySelector('[data-selected="true"]');
-      if (selectedRecipe) {
-        selectedRecipe.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    }, 100);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const selectedRecipe = document.querySelector('[data-selected="true"]');
+        const scrollContainer = document.querySelector('.recipe-scroll-container');
+
+        if (selectedRecipe && scrollContainer) {
+          const recipeRect = selectedRecipe.getBoundingClientRect();
+          const containerRect = scrollContainer.getBoundingClientRect();
+
+          const idealScrollTop = scrollContainer.scrollTop + (recipeRect.top - containerRect.top);
+          const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+          const clampedScroll = Math.max(0, Math.min(idealScrollTop, maxScroll));
+
+          scrollContainer.scrollTop = clampedScroll;
+        }
+      });
+    });
   };
 
   const getTagClassName = (tag: string) => {

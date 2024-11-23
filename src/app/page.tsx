@@ -59,27 +59,38 @@ export default function Home() {
     setEffortRange([1, 5]);
   };
 
+  const scrollToSelectedRecipe = () => {
+    const selectedRecipe = document.querySelector('[data-selected="true"]');
+    const scrollContainer = document.querySelector('.recipe-scroll-container');
+
+    if (selectedRecipe && scrollContainer) {
+      const recipeRect = selectedRecipe.getBoundingClientRect();
+      const containerRect = scrollContainer.getBoundingClientRect();
+
+      // Calculate the ideal scroll position (recipe at the top of the viewport)
+      const idealScrollTop = scrollContainer.scrollTop + (recipeRect.top - containerRect.top);
+
+      // Calculate the maximum scroll position
+      const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+
+      // Clamp the scroll position between 0 and maxScroll
+      const clampedScroll = Math.max(0, Math.min(idealScrollTop, maxScroll));
+
+      // Set scroll position without animation
+      scrollContainer.scrollTop = clampedScroll;
+    }
+  };
+
   const selectRandomRecipe = () => {
     const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
     setSelectedRecipe(filteredRecipes[randomIndex].id);
-
-    setTimeout(() => {
-      const selectedRecipe = document.querySelector('[data-selected="true"]');
-      const filtersElement = document.querySelector(".filters-container");
-
-      if (selectedRecipe && filtersElement) {
-        const filtersHeight = filtersElement.getBoundingClientRect().height;
-
-        window.scrollTo({
-          top:
-            selectedRecipe.getBoundingClientRect().top +
-            window.scrollY -
-            filtersHeight -
-            16,
-          behavior: "smooth",
-        });
-      }
-    }, 100);
+    
+    // Use requestAnimationFrame to ensure the DOM has updated
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToSelectedRecipe();
+      });
+    });
   };
 
   const handleTagChange = (tag: string, forceDisabled: boolean = false) => {
@@ -122,7 +133,7 @@ export default function Home() {
           }
         />
 
-        <div className="flex-1 p-4 overflow-y-auto">
+        <div className="flex-1 p-4 overflow-y-auto recipe-scroll-container">
           <div className="space-y-3">
             {filteredRecipes.map((recipe) => (
               <div
