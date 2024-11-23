@@ -26,14 +26,3 @@ body {
     scrollbar-width: none;
   }
 }
-
-@supports (-webkit-touch-callout: none) {
-  .min-h-screen {
-    min-height: -webkit-fill-available;
-  }
-}
-
-html,
-body {
-  height: 100%;
-}
