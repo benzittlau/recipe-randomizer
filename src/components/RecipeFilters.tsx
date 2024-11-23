@@ -2,7 +2,9 @@
 import { useState } from "react";
 import {
   AdjustmentsHorizontalIcon,
-  XMarkIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { FireIcon } from "@heroicons/react/24/solid";
 
@@ -43,38 +45,52 @@ export function RecipeFilters({
     }, 100);
   };
 
-  return (
-    <div
-      className={`bg-white border-b sticky top-0 z-10 shadow-sm ${
-        className || ""
-      }`}
-    >
-      {isExpanded ? (
-        // Expanded View (existing filters layout)
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold">Filters</h2>
-            <div className="flex gap-2">
-              {showClearFilters && (
-                <button
-                  onClick={() => {
-                    onClearFilters();
-                    ensureVisibleRecipe();
-                  }}
-                  className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
-                >
-                  Clear Filters
-                </button>
-              )}
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="p-1 hover:bg-gray-100 rounded-md"
-              >
-                <XMarkIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
+  const filterHeader = (
+    <div className="flex items-center justify-between p-2 border-b">
+      <div className="flex items-center gap-2">
+        <AdjustmentsHorizontalIcon className="w-5 h-5 text-gray-500" />
+        <span className="text-sm font-medium">Filters</span>
+      </div>
+      <div className="flex items-center gap-2">
+        {showClearFilters && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClearFilters();
+              ensureVisibleRecipe();
+            }}
+            className="p-1.5 hover:bg-gray-100 rounded-md"
+            aria-label="Clear filters"
+          >
+            <TrashIcon className="w-5 h-5 text-gray-500" />
+          </button>
+        )}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-1.5 hover:bg-gray-100 rounded-md"
+          aria-label={isExpanded ? "Collapse filters" : "Expand filters"}
+        >
+          {isExpanded ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-500" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-500" />
+          )}
+        </button>
+      </div>
+    </div>
+  );
 
+  const hasActiveFilters = 
+    selectedTags.length > 0 || 
+    effortRange[0] !== 1 || 
+    effortRange[1] !== 5;
+
+  return (
+    <div className={`bg-white border-b sticky top-0 z-10 shadow-sm ${className || ""}`}>
+      {filterHeader}
+      
+      {isExpanded ? (
+        <div className="p-4 border-t">
           <div className="flex flex-wrap gap-6">
             {/* Effort Range Slider */}
             <div className="space-y-2 w-full">
@@ -173,11 +189,10 @@ export function RecipeFilters({
               </div>
             </div>
 
-            {/* Tags Section - now always expanded */}
+            {/* Tags Section */}
             <div className="space-y-2 w-full">
               <h3 className="text-sm font-semibold">
-                Ingredients{" "}
-                {selectedTags.length > 0 && `(${selectedTags.length})`}
+                Ingredients {selectedTags.length > 0 && `(${selectedTags.length})`}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {allTags.map((tag) => (
@@ -200,22 +215,14 @@ export function RecipeFilters({
             </div>
           </div>
         </div>
-      ) : (
-        // Collapsed Summary View
-        <div className="p-2 flex items-center gap-2">
-          <button
-            onClick={() => setIsExpanded(true)}
-            className="p-1.5 hover:bg-gray-100 rounded-md"
-          >
-            <AdjustmentsHorizontalIcon className="w-5 h-5" />
-          </button>
-
+      ) : hasActiveFilters ? (
+        <div className="px-2 py-1.5 flex items-center gap-2">
           <div className="flex-1 flex items-center gap-2 overflow-x-auto no-scrollbar">
             {/* Effort Level Indicator */}
             {(effortRange[0] !== 1 || effortRange[1] !== 5) && (
               <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full">
-                <FireIcon className="w-4 h-4" />
-                <span className="text-xs">
+                <FireIcon className="w-4 h-4 text-gray-700" />
+                <span className="text-xs text-gray-700">
                   {effortRange[0]}-{effortRange[1]}
                 </span>
               </div>
@@ -235,20 +242,8 @@ export function RecipeFilters({
               </button>
             ))}
           </div>
-
-          {showClearFilters && (
-            <button
-              onClick={() => {
-                onClearFilters();
-                ensureVisibleRecipe();
-              }}
-              className="p-1.5 hover:bg-gray-100 rounded-md"
-            >
-              <XMarkIcon className="w-5 h-5" />
-            </button>
-          )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
