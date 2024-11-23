@@ -4,12 +4,16 @@ import { useState, useMemo } from "react";
 import { recipes } from "@/data/recipes";
 import { RecipeFilters } from "@/components/RecipeFilters";
 import { FireIcon } from "@heroicons/react/24/outline";
-import { useClientState } from '@/hooks/useClientState';
+import { useClientState } from "@/hooks/useClientState";
 
 export default function Home() {
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
-  const [selectedTags, setSelectedTags, isLoadingTags] = useClientState<string[]>('selectedTags', []);
-  const [effortRange, setEffortRange, isLoadingEffort] = useClientState<[number, number]>('effortRange', [1, 5]);
+  const [selectedTags, setSelectedTags, isLoadingTags] = useClientState<
+    string[]
+  >("selectedTags", []);
+  const [effortRange, setEffortRange, isLoadingEffort] = useClientState<
+    [number, number]
+  >("effortRange", [1, 5]);
 
   const filteredRecipes = useMemo(() => {
     return recipes.filter((recipe) => {
@@ -68,10 +72,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-background overscroll-contain">
-      <div className="max-w-3xl w-full mx-auto flex flex-col flex-1">
+    <main className="h-screen flex flex-col bg-background">
+      <div className="max-w-3xl w-full mx-auto flex flex-col h-full">
         <RecipeFilters
-          className="filters-container backdrop-blur-sm bg-card/80 border-card-border"
+          className="filters-container backdrop-blur-sm bg-card/80 border-card-border flex-shrink-0"
           allTags={Array.from(new Set(recipes.flatMap((r) => r.tags))).sort()}
           selectedTags={selectedTags}
           effortRange={effortRange}
@@ -85,7 +89,7 @@ export default function Home() {
           }
         />
 
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-3">
             {filteredRecipes.map((recipe) => (
               <div
@@ -143,7 +147,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="sticky bottom-0 p-4 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm">
+        <div className="p-4 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm flex-shrink-0">
           <button
             onClick={selectRandomRecipe}
             className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
