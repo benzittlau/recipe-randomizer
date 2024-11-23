@@ -202,10 +202,10 @@ export function RecipeFilters({
                       onTagChange(tag);
                       ensureVisibleRecipe();
                     }}
-                    className={`px-3 py-1 rounded-full text-sm ${
+                    className={`px-2 py-0.5 text-xs rounded-full border ${
                       selectedTags.includes(tag)
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-blue-500 text-white border-blue-600"
+                        : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
                     }`}
                   >
                     {tag}
@@ -236,7 +236,7 @@ export function RecipeFilters({
                   onTagChange(tag);
                   ensureVisibleRecipe();
                 }}
-                className="px-2 py-1 rounded-full text-xs bg-blue-500 text-white whitespace-nowrap"
+                className="px-2 py-0.5 text-xs rounded-full bg-blue-500 text-white border border-blue-600 whitespace-nowrap"
               >
                 {tag}
               </button>
