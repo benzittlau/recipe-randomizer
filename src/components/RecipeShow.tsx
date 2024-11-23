@@ -9,16 +9,16 @@ interface RecipeShowProps {
   onTagChange: (tag: string) => void;
 }
 
-export function RecipeShow({ 
-  recipe, 
-  isFiltered, 
+export function RecipeShow({
+  recipe,
+  isFiltered,
   onBack,
   tagFilters,
-  onTagChange 
+  onTagChange,
 }: RecipeShowProps) {
   const getTagClassName = (tag: string) => {
     const state = tagFilters[tag] || "disabled";
-    
+
     if (state === "disabled") {
       return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
     }
@@ -47,13 +47,17 @@ export function RecipeShow({
           </span>
         )}
       </div>
-      
+
       <div className="space-y-8">
         {/* Header Section */}
         <div className="space-y-4">
-          <h1 className="text-3xl font-semibold text-gray-900">{recipe.name}</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            {recipe.name}
+          </h1>
           {recipe.description && (
-            <p className="text-gray-600 text-lg leading-relaxed">{recipe.description}</p>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              {recipe.description}
+            </p>
           )}
         </div>
 
@@ -87,11 +91,15 @@ export function RecipeShow({
                 ))}
               </div>
               <span className="text-sm text-gray-600 ml-2">
-                {recipe.effort === 1 ? "Very Easy" :
-                 recipe.effort === 2 ? "Easy" :
-                 recipe.effort === 3 ? "Moderate" :
-                 recipe.effort === 4 ? "Challenging" :
-                 "Difficult"}
+                {recipe.effort === 1
+                  ? "Very Easy"
+                  : recipe.effort === 2
+                  ? "Easy"
+                  : recipe.effort === 3
+                  ? "Moderate"
+                  : recipe.effort === 4
+                  ? "Challenging"
+                  : "Difficult"}
               </span>
             </div>
           </div>
@@ -99,14 +107,16 @@ export function RecipeShow({
           {/* Ingredients/Tags */}
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-              Key Ingredients
+              Tags
             </h3>
             <div className="flex flex-wrap gap-2">
               {recipe.tags.map((tag) => (
                 <button
                   key={tag}
                   onClick={() => onTagChange(tag)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${getTagClassName(tag)}`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${getTagClassName(
+                    tag
+                  )}`}
                 >
                   {tag}
                 </button>
@@ -122,4 +132,4 @@ export function RecipeShow({
       </div>
     </div>
   );
-} 
+}

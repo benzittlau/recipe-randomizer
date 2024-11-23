@@ -35,15 +35,22 @@ export function RecipeFilters({
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const selectedRecipe = document.querySelector('[data-selected="true"]');
-        const scrollContainer = document.querySelector('.recipe-scroll-container');
+        const scrollContainer = document.querySelector(
+          ".recipe-scroll-container"
+        );
 
         if (selectedRecipe && scrollContainer) {
           const recipeRect = selectedRecipe.getBoundingClientRect();
           const containerRect = scrollContainer.getBoundingClientRect();
 
-          const idealScrollTop = scrollContainer.scrollTop + (recipeRect.top - containerRect.top);
-          const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-          const clampedScroll = Math.max(0, Math.min(idealScrollTop, maxScroll));
+          const idealScrollTop =
+            scrollContainer.scrollTop + (recipeRect.top - containerRect.top);
+          const maxScroll =
+            scrollContainer.scrollHeight - scrollContainer.clientHeight;
+          const clampedScroll = Math.max(
+            0,
+            Math.min(idealScrollTop, maxScroll)
+          );
 
           scrollContainer.scrollTop = clampedScroll;
         }
@@ -53,7 +60,7 @@ export function RecipeFilters({
 
   const getTagClassName = (tag: string) => {
     const state = tagFilters[tag] || "disabled";
-    
+
     if (state === "disabled") {
       return "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200";
     }
@@ -67,7 +74,9 @@ export function RecipeFilters({
   };
 
   const hasActiveFilters =
-    Object.keys(tagFilters).length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5;
+    Object.keys(tagFilters).length > 0 ||
+    effortRange[0] !== 1 ||
+    effortRange[1] !== 5;
 
   return (
     <div
@@ -247,8 +256,9 @@ export function RecipeFilters({
             {/* Tags Section */}
             <div className="space-y-2 w-full">
               <h3 className="text-sm font-semibold">
-                Ingredients{" "}
-                {Object.keys(tagFilters).length > 0 && `(${Object.keys(tagFilters).length})`}
+                Tags{" "}
+                {Object.keys(tagFilters).length > 0 &&
+                  `(${Object.keys(tagFilters).length})`}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {allTags.map((tag) => (
@@ -258,7 +268,9 @@ export function RecipeFilters({
                       onTagChange(tag);
                       ensureVisibleRecipe();
                     }}
-                    className={`px-3 py-1 text-sm rounded-full border ${getTagClassName(tag)}`}
+                    className={`px-3 py-1 text-sm rounded-full border ${getTagClassName(
+                      tag
+                    )}`}
                   >
                     {tag}
                   </button>
