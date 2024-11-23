@@ -43,13 +43,15 @@ export function RecipeFilters({
     }, 100);
   };
 
-  const hasActiveFilters = 
-    selectedTags.length > 0 || 
-    effortRange[0] !== 1 || 
-    effortRange[1] !== 5;
+  const hasActiveFilters =
+    selectedTags.length > 0 || effortRange[0] !== 1 || effortRange[1] !== 5;
 
   return (
-    <div className={`bg-white border-b sticky top-0 z-10 shadow-sm ${className || ""}`}>
+    <div
+      className={`bg-white border-b sticky top-0 z-10 shadow-sm ${
+        className || ""
+      }`}
+    >
       <div className="flex items-center justify-between p-2 border-b">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -82,7 +84,7 @@ export function RecipeFilters({
           </button>
         )}
       </div>
-      
+
       {isExpanded ? (
         <div className="p-4 border-t">
           <div className="flex flex-wrap gap-6">
@@ -99,19 +101,53 @@ export function RecipeFilters({
                   {/* Background track */}
                   <div className="absolute h-3 w-full bg-gray-200 rounded-full"></div>
 
-                  {/* Selected range */}
-                  <div
-                    className="absolute h-3 bg-blue-500 rounded-full"
-                    style={{
-                      left: `${((effortRange[0] - 1) / 4) * 100}%`,
-                      right: `${100 - ((effortRange[1] - 1) / 4) * 100}%`,
-                    }}
-                  ></div>
+                  {/* Colored segments */}
+                  {[1, 2, 3, 4].map((segment) => {
+                    const isInRange =
+                      segment >= effortRange[0] && segment < effortRange[1];
+                    if (!isInRange) return null;
+
+                    const segmentColor =
+                      segment === 1
+                        ? "bg-green-500"
+                        : segment === 2
+                        ? "bg-yellow-500"
+                        : segment === 3
+                        ? "bg-orange-500"
+                        : "bg-red-500";
+
+                    const leftPosition = `${((segment - 1) / 4) * 100}%`;
+                    const rightPosition = `${(1 - segment / 4) * 100}%`;
+
+                    return (
+                      <div
+                        key={segment}
+                        className={`absolute h-3 ${segmentColor}`}
+                        style={{
+                          left: leftPosition,
+                          right: rightPosition,
+                        }}
+                      />
+                    );
+                  })}
+
+                  {/* Final segment (if range includes 5) */}
+                  {effortRange[1] === 5 && effortRange[0] <= 4 && (
+                    <div
+                      className="absolute h-3 bg-red-500"
+                      style={{
+                        left: `${
+                          ((Math.max(4, effortRange[0]) - 1) / 4) * 100
+                        }%`,
+                        right: "0%",
+                      }}
+                    />
+                  )}
 
                   {/* Scale markers */}
                   <div className="absolute w-full h-full flex justify-between items-center px-4">
                     {[1, 2, 3, 4, 5].map((num) => (
-                      <div key={num} className="w-0.5 h-5 bg-gray-300 -mt-1" />
+                      <div key={num} className="w-0.5 h-5 -mt-1 bg-gray-300" />
                     ))}
                   </div>
 
@@ -186,7 +222,8 @@ export function RecipeFilters({
             {/* Tags Section */}
             <div className="space-y-2 w-full">
               <h3 className="text-sm font-semibold">
-                Ingredients {selectedTags.length > 0 && `(${selectedTags.length})`}
+                Ingredients{" "}
+                {selectedTags.length > 0 && `(${selectedTags.length})`}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {allTags.map((tag) => (
