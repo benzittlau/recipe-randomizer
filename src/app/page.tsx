@@ -68,7 +68,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-background">
+    <main className="min-h-screen flex flex-col bg-background overscroll-contain">
       <div className="max-w-3xl w-full mx-auto flex flex-col flex-1">
         <RecipeFilters
           className="filters-container backdrop-blur-sm bg-card/80 border-card-border"
