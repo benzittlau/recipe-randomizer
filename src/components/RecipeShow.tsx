@@ -9,65 +9,92 @@ interface RecipeShowProps {
 
 export function RecipeShow({ recipe, isFiltered, onBack }: RecipeShowProps) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
+    <div className="max-w-2xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-3 py-1.5 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <ArrowLeftIcon className="w-4 h-4" />
           Back to list
         </button>
         {!isFiltered && (
-          <span className="text-sm text-yellow-600">
-            (This recipe is currently filtered out)
+          <span className="text-sm px-3 py-1.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg">
+            This recipe is currently filtered out
           </span>
         )}
       </div>
       
-      <div className="p-6 rounded-xl border border-card-border bg-card">
-        <h1 className="text-2xl font-semibold mb-4">{recipe.name}</h1>
-        
-        {recipe.description && (
-          <p className="text-gray-800 mb-6">{recipe.description}</p>
-        )}
+      <div className="space-y-8">
+        {/* Header Section */}
+        <div className="space-y-4">
+          <h1 className="text-3xl font-semibold text-gray-900">{recipe.name}</h1>
+          {recipe.description && (
+            <p className="text-gray-600 text-lg leading-relaxed">{recipe.description}</p>
+          )}
+        </div>
 
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <div className="flex items-center gap-1.5">
-            <FireIcon className="w-4 h-4 text-gray-800" />
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={`h-3 w-3 rounded-full ${
-                  star <= recipe.effort
-                    ? recipe.effort === 1
-                      ? "bg-green-400"
-                      : recipe.effort === 2
-                      ? "bg-green-500"
-                      : recipe.effort === 3
-                      ? "bg-yellow-500"
-                      : recipe.effort === 4
-                      ? "bg-orange-500"
-                      : "bg-red-500"
-                    : "bg-gray-100"
-                }`}
-              />
-            ))}
+        {/* Metadata Section */}
+        <div className="space-y-6">
+          {/* Effort Level */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+              Effort Level
+            </h3>
+            <div className="flex items-center gap-2">
+              <FireIcon className="w-5 h-5 text-gray-700" />
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`h-3.5 w-3.5 rounded-full ${
+                      star <= recipe.effort
+                        ? recipe.effort === 1
+                          ? "bg-green-400"
+                          : recipe.effort === 2
+                          ? "bg-green-500"
+                          : recipe.effort === 3
+                          ? "bg-yellow-500"
+                          : recipe.effort === 4
+                          ? "bg-orange-500"
+                          : "bg-red-500"
+                        : "bg-gray-100"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-gray-600 ml-2">
+                {recipe.effort === 1 ? "Very Easy" :
+                 recipe.effort === 2 ? "Easy" :
+                 recipe.effort === 3 ? "Moderate" :
+                 recipe.effort === 4 ? "Challenging" :
+                 "Difficult"}
+              </span>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5">
-            {recipe.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-800 border border-gray-200"
-              >
-                {tag}
-              </span>
-            ))}
+          {/* Ingredients/Tags */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+              Key Ingredients
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {recipe.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1.5 text-sm rounded-lg bg-gray-50 text-gray-700 border border-gray-200"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Add more recipe details here based on your data structure */}
+        {/* Recipe Content Section */}
+        <div className="pt-6 border-t">
+          {/* Add your recipe details here (ingredients list, steps, etc.) */}
+        </div>
       </div>
     </div>
   );
