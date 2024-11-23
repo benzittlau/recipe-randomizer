@@ -233,7 +233,7 @@ export function RecipeFilters({
                       onTagChange(tag);
                       ensureVisibleRecipe();
                     }}
-                    className={`px-2 py-0.5 text-xs rounded-full border ${
+                    className={`px-3 py-1 text-sm rounded-full border ${
                       selectedTags.includes(tag)
                         ? "bg-blue-500 text-white border-blue-600"
                         : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
@@ -251,12 +251,18 @@ export function RecipeFilters({
           <div className="flex-1 flex items-center gap-2 overflow-x-auto no-scrollbar">
             {/* Effort Level Indicator */}
             {(effortRange[0] !== 1 || effortRange[1] !== 5) && (
-              <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full">
+              <button
+                onClick={() => {
+                  onEffortRangeChange([1, 5]);
+                  ensureVisibleRecipe();
+                }}
+                className="flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
+              >
                 <FireIcon className="w-4 h-4 text-gray-700" />
-                <span className="text-xs text-gray-700">
+                <span className="text-sm text-gray-700">
                   {effortRange[0]}-{effortRange[1]}
                 </span>
-              </div>
+              </button>
             )}
 
             {/* Selected Tags */}
@@ -267,7 +273,7 @@ export function RecipeFilters({
                   onTagChange(tag);
                   ensureVisibleRecipe();
                 }}
-                className="px-2 py-0.5 text-xs rounded-full bg-blue-500 text-white border border-blue-600 whitespace-nowrap"
+                className="px-3 py-1 text-sm rounded-full bg-blue-500 text-white border border-blue-600 whitespace-nowrap hover:bg-blue-600 transition-colors"
               >
                 {tag}
               </button>
