@@ -118,7 +118,7 @@ export default function Home() {
   };
 
   return (
-    <main className="h-screen flex flex-col bg-background">
+    <main className="h-dvh flex flex-col bg-background">
       <div className="max-w-3xl w-full mx-auto flex flex-col h-full">
         <RecipeFilters
           className="filters-container backdrop-blur-sm bg-card/80 border-card-border flex-shrink-0"
