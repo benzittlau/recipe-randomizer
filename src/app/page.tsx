@@ -206,9 +206,10 @@ export default function Home() {
 
             <button
               onClick={selectRandomRecipe}
-              className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
+              className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm flex items-center justify-center gap-2"
             >
-              Pick Random Recipe
+              <span className="text-xl" aria-hidden="true">🎲</span>
+              {"I'm Feeling Lucky"}
             </button>
 
             {currentRecipe && (
