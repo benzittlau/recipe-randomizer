@@ -16,14 +16,22 @@ export default function Home() {
   >("effortRange", [1, 5]);
 
   const filteredRecipes = useMemo(() => {
-    return recipes.filter((recipe) => {
-      const effortMatch =
-        recipe.effort >= effortRange[0] && recipe.effort <= effortRange[1];
-      const tagsMatch =
-        selectedTags.length === 0 ||
-        selectedTags.every((tag) => recipe.tags.includes(tag));
-      return effortMatch && tagsMatch;
-    });
+    return recipes
+      .filter((recipe) => {
+        const effortMatch =
+          recipe.effort >= effortRange[0] && recipe.effort <= effortRange[1];
+        const tagsMatch =
+          selectedTags.length === 0 ||
+          selectedTags.every((tag) => recipe.tags.includes(tag));
+        return effortMatch && tagsMatch;
+      })
+      .sort((a, b) => {
+        const effortDiff = a.effort - b.effort;
+        if (effortDiff === 0) {
+          return a.name.localeCompare(b.name);
+        }
+        return effortDiff;
+      });
   }, [effortRange, selectedTags]);
 
   if (isLoadingTags || isLoadingEffort) {

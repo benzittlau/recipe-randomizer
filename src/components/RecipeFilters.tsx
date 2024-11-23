@@ -31,9 +31,7 @@ export function RecipeFilters({
 }: FilterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Add this function to handle scrolling
   const ensureVisibleRecipe = () => {
-    // Give the DOM time to update
     setTimeout(() => {
       const selectedRecipe = document.querySelector('[data-selected="true"]');
       if (selectedRecipe) {
@@ -45,41 +43,6 @@ export function RecipeFilters({
     }, 100);
   };
 
-  const filterHeader = (
-    <div className="flex items-center justify-between p-2 border-b">
-      <div className="flex items-center gap-2">
-        <AdjustmentsHorizontalIcon className="w-5 h-5 text-gray-500" />
-        <span className="text-sm font-medium">Filters</span>
-      </div>
-      <div className="flex items-center gap-2">
-        {showClearFilters && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onClearFilters();
-              ensureVisibleRecipe();
-            }}
-            className="p-1.5 hover:bg-gray-100 rounded-md"
-            aria-label="Clear filters"
-          >
-            <TrashIcon className="w-5 h-5 text-gray-500" />
-          </button>
-        )}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1.5 hover:bg-gray-100 rounded-md"
-          aria-label={isExpanded ? "Collapse filters" : "Expand filters"}
-        >
-          {isExpanded ? (
-            <ChevronUpIcon className="w-5 h-5 text-gray-500" />
-          ) : (
-            <ChevronDownIcon className="w-5 h-5 text-gray-500" />
-          )}
-        </button>
-      </div>
-    </div>
-  );
-
   const hasActiveFilters = 
     selectedTags.length > 0 || 
     effortRange[0] !== 1 || 
@@ -87,7 +50,38 @@ export function RecipeFilters({
 
   return (
     <div className={`bg-white border-b sticky top-0 z-10 shadow-sm ${className || ""}`}>
-      {filterHeader}
+      <div className="flex items-center justify-between p-2 border-b">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 hover:bg-gray-100 p-1.5 rounded-md"
+        >
+          <AdjustmentsHorizontalIcon className="w-5 h-5 text-gray-500" />
+          <span className="text-sm font-medium">Filters</span>
+          {isExpanded ? (
+            <ChevronUpIcon className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDownIcon className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+
+        {showClearFilters && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClearFilters();
+              ensureVisibleRecipe();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm 
+              text-red-600 hover:text-red-700
+              border border-red-200 hover:border-red-300
+              hover:bg-red-50
+              rounded-md transition-colors"
+          >
+            <TrashIcon className="w-4 h-4" />
+            Clear Filters
+          </button>
+        )}
+      </div>
       
       {isExpanded ? (
         <div className="p-4 border-t">
