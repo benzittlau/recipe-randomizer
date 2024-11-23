@@ -2,11 +2,11 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { RecipeFilters } from "@/components/RecipeFilters";
-import { ChevronLeftIcon, ChevronRightIcon, CubeIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useClientState } from "@/hooks/useClientState";
 import { RecipeShow } from "@/components/RecipeShow";
 import { RecipeListItem } from "@/components/RecipeListItem";
-import { fetchRecipes } from '@/services/sheets';
+import { fetchRecipes } from "@/services/sheets";
 import { Recipe } from "@/types/recipe";
 
 type TagFilterState = "disabled" | "whitelist" | "blacklist";
@@ -31,7 +31,7 @@ export default function Home() {
         const data = await fetchRecipes();
         setRecipes(data);
       } catch (error) {
-        console.error('Failed to load recipes:', error);
+        console.error("Failed to load recipes:", error);
       } finally {
         setIsLoadingRecipes(false);
       }
@@ -66,22 +66,26 @@ export default function Home() {
 
   const recipeNavigation = useMemo(() => {
     if (!currentRecipeId) return null;
-    
-    const currentIndex = filteredRecipes.findIndex(r => r.id === currentRecipeId);
+
+    const currentIndex = filteredRecipes.findIndex(
+      (r) => r.id === currentRecipeId
+    );
     return {
       hasPrevious: filteredRecipes.length > 0,
       hasNext: filteredRecipes.length > 0,
-      previousId: filteredRecipes.length > 0 
-        ? currentIndex <= 0 
-          ? filteredRecipes[filteredRecipes.length - 1].id
-          : filteredRecipes[currentIndex - 1].id
-        : null,
-      nextId: filteredRecipes.length > 0
-        ? currentIndex >= filteredRecipes.length - 1
-          ? filteredRecipes[0].id
-          : filteredRecipes[currentIndex + 1].id
-        : null,
-      isCurrentRecipeFiltered: currentIndex !== -1
+      previousId:
+        filteredRecipes.length > 0
+          ? currentIndex <= 0
+            ? filteredRecipes[filteredRecipes.length - 1].id
+            : filteredRecipes[currentIndex - 1].id
+          : null,
+      nextId:
+        filteredRecipes.length > 0
+          ? currentIndex >= filteredRecipes.length - 1
+            ? filteredRecipes[0].id
+            : filteredRecipes[currentIndex + 1].id
+          : null,
+      isCurrentRecipeFiltered: currentIndex !== -1,
     };
   }, [currentRecipeId, filteredRecipes]);
 
@@ -138,7 +142,9 @@ export default function Home() {
     });
   };
 
-  const currentRecipe = currentRecipeId ? recipes.find(r => r.id === currentRecipeId) : null;
+  const currentRecipe = currentRecipeId
+    ? recipes.find((r) => r.id === currentRecipeId)
+    : null;
 
   return (
     <main className="h-dvh flex flex-col bg-background">
@@ -187,25 +193,30 @@ export default function Home() {
           <div className="flex gap-2">
             {currentRecipe && (
               <button
-                onClick={() => recipeNavigation?.previousId && setCurrentRecipeId(recipeNavigation.previousId)}
+                onClick={() =>
+                  recipeNavigation?.previousId &&
+                  setCurrentRecipeId(recipeNavigation.previousId)
+                }
                 disabled={!recipeNavigation?.hasPrevious}
                 className="px-4 py-3 rounded-xl font-medium bg-gray-100 text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
               >
                 <ChevronLeftIcon className="w-5 h-5" />
               </button>
             )}
-            
+
             <button
               onClick={selectRandomRecipe}
-              className="flex-1 bg-primary text-white py-3 px-4 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm flex items-center justify-center gap-2"
+              className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary-hover transition-colors shadow-sm"
             >
-              <CubeIcon className="w-5 h-5" />
-              I'm Feeling Lucky
+              Pick Random Recipe
             </button>
 
             {currentRecipe && (
               <button
-                onClick={() => recipeNavigation?.nextId && setCurrentRecipeId(recipeNavigation.nextId)}
+                onClick={() =>
+                  recipeNavigation?.nextId &&
+                  setCurrentRecipeId(recipeNavigation.nextId)
+                }
                 disabled={!recipeNavigation?.hasNext}
                 className="px-4 py-3 rounded-xl font-medium bg-gray-100 text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 transition-colors"
               >

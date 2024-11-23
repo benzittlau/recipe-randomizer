@@ -26,15 +26,30 @@ export async function fetchRecipes() {
     // Transform the data into our Recipe format
     const recipes = data.table.rows
       .filter((row: SheetRow) => row.c[0]?.v) // Filter out empty rows
-      .map((row: SheetRow, index: number) => ({
-        id: String(index + 1),
-        name: row.c[0]?.v || "",
-        effort: parseInt(`${row.c[1]?.v ?? "1"}`) || 1,
-        tags: `${row.c[2]?.v ?? ""}`
-          .split(",")
-          .map((tag: string) => tag.trim())
-          .filter(Boolean),
-      }));
+      .map((row: SheetRow, index: number) => {
+        // Collect tags from all columns starting from index 2 (column C) onwards
+        const allTags = row.c
+          .slice(2) // Start from column C (index 2)
+          .filter((cell) => cell?.v) // Filter out empty cells
+          .filter((cell) => cell !== null) // Filter out empty cells
+          .map((cell) => `${cell.v}`) // Convert to string
+          .flatMap(
+            (
+              value // Split any comma-separated values
+            ) =>
+              value
+                .split(",")
+                .map((tag: string) => tag.trim())
+                .filter(Boolean)
+          );
+
+        return {
+          id: String(index + 1),
+          name: row.c[0]?.v || "",
+          effort: parseInt(`${row.c[1]?.v ?? "1"}`) || 1,
+          tags: allTags,
+        };
+      });
 
     return recipes;
   } catch (error) {
