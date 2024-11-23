@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { recipes } from "@/data/recipes";
+import { useState, useMemo, useEffect } from "react";
 import { RecipeFilters } from "@/components/RecipeFilters";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useClientState } from "@/hooks/useClientState";
 import { RecipeShow } from "@/components/RecipeShow";
 import { RecipeListItem } from "@/components/RecipeListItem";
+import { fetchRecipes } from '@/services/sheets';
+import { Recipe } from "@/types/recipe";
 
 type TagFilterState = "disabled" | "whitelist" | "blacklist";
 type TagFilters = Record<string, TagFilterState>;
@@ -20,6 +21,24 @@ export default function Home() {
   const [effortRange, setEffortRange, isLoadingEffort] = useClientState<
     [number, number]
   >("effortRange", [1, 5]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isLoadingRecipes, setIsLoadingRecipes] = useState(true);
+
+  useEffect(() => {
+    const loadRecipes = async () => {
+      setIsLoadingRecipes(true);
+      try {
+        const data = await fetchRecipes();
+        setRecipes(data);
+      } catch (error) {
+        console.error('Failed to load recipes:', error);
+      } finally {
+        setIsLoadingRecipes(false);
+      }
+    };
+
+    loadRecipes();
+  }, []);
 
   const filteredRecipes = useMemo(() => {
     return recipes
@@ -43,7 +62,7 @@ export default function Home() {
         }
         return effortDiff;
       });
-  }, [effortRange, tagFilters]);
+  }, [effortRange, tagFilters, recipes]);
 
   const recipeNavigation = useMemo(() => {
     if (!currentRecipeId) return null;
@@ -81,12 +100,12 @@ export default function Home() {
     setCurrentRecipeId(filteredRecipes[randomIndex].id);
   };
 
-  if (isLoadingTags || isLoadingEffort) {
+  if (isLoadingRecipes || isLoadingTags || isLoadingEffort) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-background">
         <div className="p-4 text-center">
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-2 text-sm text-gray-600">Loading...</p>
+          <p className="mt-2 text-sm text-gray-600">Loading recipes...</p>
         </div>
       </main>
     );
