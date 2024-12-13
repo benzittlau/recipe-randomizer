@@ -1,6 +1,8 @@
 const SHEET_ID = "1iIthh7N1L_fepFzx5RVWUSnTs8VCqd_Kz12lJPRx07g";
 const SHEET_NAME = "Recipes To Choose From";
 
+import { generateRecipeDescription } from "@/utils/recipeDescription";
+
 interface SheetCell {
   v: string | number | null;
   f?: string;
@@ -48,8 +50,14 @@ export async function fetchRecipes() {
           name: row.c[0]?.v || "",
           effort: parseInt(`${row.c[1]?.v ?? "1"}`) || 1,
           tags: allTags,
+          description: "", // We'll generate this after
         };
       });
+
+    // Add descriptions to all recipes
+    recipes.forEach(recipe => {
+      recipe.description = generateRecipeDescription(recipe);
+    });
 
     return recipes;
   } catch (error) {
